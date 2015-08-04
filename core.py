@@ -101,6 +101,7 @@ def echo():
         if LAST_UPDATE_ID < update.update_id:
             chat_id = update.message.chat_id
             message = update.message.text.encode('utf-8')
+            is_group = update.message.chat_id != update.message.from_user.id
             try:
                 username = update.message.from_user.username.decode().encode('utf-8')
                 pass
@@ -117,66 +118,73 @@ def echo():
             if not os.path.exists(directory):
                 os.makedirs(directory)
             fullpath = directory + '/' + output
-            if message == '/settings':
-                keyboard(1, chat_id)
-                pass
-            elif message == '/start':
-                bot.sendMessage(chat_id=chat_id, text='Youre welcome! Just try it to send me a python script!')
-                pass
-            elif message == '/example':
-                send(example, fullpath, chat_id)
-                pass
-            elif message == '/help':
-                bot.sendMessage(chat_id=chat_id, text='Youre welcome! Just try it to send me a python script!\n/example - Sends you a example code\n/settings - Let you setup many different styles etc.\n/help - Shows this message')
-                pass
-            elif message == 'Change style':
-                keyboard(2, chat_id)
-                pass
-            elif message == 'Monokai':
-                style = 'monokai'
-                bot.sendMessage(chat_id=chat_id, text='Changed to style: ' + style)
-                send(example, fullpath, chat_id)
-                pass
-            elif message == 'Autumn':
-                style = 'autumn'
-                print style
-                bot.sendMessage(chat_id=chat_id, text='Changed to style: ' + style)
-                send(example, fullpath, chat_id)
-                pass
-            elif message == 'Colorful':
-                style = 'colorful'
-                bot.sendMessage(chat_id=chat_id, text='Changed to style: ' + style)
-                send(example, fullpath, chat_id)
-                pass
-            elif message == 'Change font':
-                keyboard(3, chat_id)
-                pass
-            elif message == 'Consolas':
-                font = 'Consolas'
-                send(shortexample, fullpath, chat_id)
-                pass
-            elif message == 'Impact':
-                font = 'Impact'
-                send(shortexample, fullpath, chat_id)
-                pass
-            elif message == 'Comic Sans MS':
-                font = 'Comic Sans MS'
-                send(shortexample, fullpath, chat_id)
-                pass
-            elif message == 'Next':
-                bot.sendMessage(chat_id=chat_id, text='Not yet.')
-                pass
-            elif message == 'Back':
-                keyboard(1, chat_id)
-                pass
-            elif message == 'Donate':
-                bot.sendMessage(chat_id=chat_id, text='Thank you for supporting this tool. Feel free to send some BTC to this address:\n1NVZ5dX9Ekh14cDHRKTjxYqAcHRJpdYyfN')
-                pass
-            elif message == 'Exit':
-                keyboard(99, chat_id)
+            if (is_group == False):
+                if message == '/settings':
+                    keyboard(1, chat_id)
+                    pass
+                elif message == '/start':
+                    bot.sendMessage(chat_id=chat_id, text='Youre welcome! Just try it to send me a python script!')
+                    pass
+                elif message == '/example':
+                    send(example, fullpath, chat_id)
+                    pass
+                elif message == '/help':
+                    bot.sendMessage(chat_id=chat_id, text='Youre welcome! Just try it to send me a python script!\n/example - Sends you a example code\n/settings - Let you setup many different styles etc.\n/help - Shows this message')
+                    pass
+                elif message == 'Change style':
+                    keyboard(2, chat_id)
+                    pass
+                elif message == 'Monokai':
+                    style = 'monokai'
+                    bot.sendMessage(chat_id=chat_id, text='Changed to style: ' + style)
+                    send(example, fullpath, chat_id)
+                    pass
+                elif message == 'Autumn':
+                    style = 'autumn'
+                    print style
+                    bot.sendMessage(chat_id=chat_id, text='Changed to style: ' + style)
+                    send(example, fullpath, chat_id)
+                    pass
+                elif message == 'Colorful':
+                    style = 'colorful'
+                    bot.sendMessage(chat_id=chat_id, text='Changed to style: ' + style)
+                    send(example, fullpath, chat_id)
+                    pass
+                elif message == 'Change font':
+                    keyboard(3, chat_id)
+                    pass
+                elif message == 'Consolas':
+                    font = 'Consolas'
+                    send(shortexample, fullpath, chat_id)
+                    pass
+                elif message == 'Impact':
+                    font = 'Impact'
+                    send(shortexample, fullpath, chat_id)
+                    pass
+                elif message == 'Comic Sans MS':
+                    font = 'Comic Sans MS'
+                    send(shortexample, fullpath, chat_id)
+                    pass
+                elif message == 'Next':
+                    bot.sendMessage(chat_id=chat_id, text='Not yet.')
+                    pass
+                elif message == 'Back':
+                    keyboard(1, chat_id)
+                    pass
+                elif message == 'Donate':
+                    bot.sendMessage(chat_id=chat_id, text='Thank you for supporting this tool. Feel free to send some BTC to this address:\n1NVZ5dX9Ekh14cDHRKTjxYqAcHRJpdYyfN')
+                    pass
+                elif message == 'Exit':
+                    keyboard(99, chat_id)
+                    pass
+                else:
+                    send(message, fullpath, chat_id)
+                    pass
                 pass
             else:
-                send(message, fullpath, chat_id)
+                if message.startswith("/code "):
+                    send(message[6:], fullpath, chat_id)
+                    pass
                 pass
 
             LAST_UPDATE_ID = update.update_id
